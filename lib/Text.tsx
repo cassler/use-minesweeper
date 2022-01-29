@@ -1,29 +1,37 @@
 import { useMemo } from 'react';
 
 export interface TextProps {
-  level?: 1 | 2 | 3 | 4 | 5 | 6;
-  children: React.ReactNode;
+  level?: 1 | 2 | 3 | 4 | 5 | 6 | keyof typeof TextTokens
   inverted?: boolean;
 }
-export type TextHTMLProps = TextProps & React.HTMLAttributes<HTMLElement>;
+export type TextHTMLProps = React.HTMLAttributes<HTMLElement> & TextProps;
 
-export function useDesignToken({ level, inverted }:Omit<TextProps, 'children'>):string {
-  const TextTokens = {
-    subcaption: 'text-xs',
-    caption: 'text-sm',
-    base: 'text-base',
-    subheading: 'text-lg font-semibold',
-    heading: 'text-xl font-bold',
-    hero: 'text-2xl font-bold',
-  };
-  const ContrastTokens = {
-    base: ['400', '400', '700', '800', '800', '900'],
-    dark: ['600', '600', '500', '300', '200', '100'],
-  };
+export const TextTokens = {
+  subcaption: 'text-xs',
+  caption: 'text-sm',
+  base: 'text-base',
+  subheading: 'text-lg font-semibold',
+  heading: 'text-xl font-bold',
+  hero: 'text-2xl font-bold',
+};
+export const ContrastTokens = {
+  base: ['400', '400', '700', '800', '800', '900'],
+  dark: ['600', '600', '500', '300', '200', '100'],
+};
+export function useDesignToken({ level = 3, inverted }:TextProps):string {
   return useMemo(() => {
-    const size = Object.values(TextTokens)[level - 1];
-    const contrast = ContrastTokens[inverted ? 'dark' : 'base'][level - 1];
-    return `${size} text-slate-${contrast}`;
+    if (typeof level === 'number') {
+      const size = Object.values(TextTokens)[level - 1];
+      const contrast = ContrastTokens[inverted ? 'dark' : 'base'][level - 1];
+      return `${size} text-slate-${contrast}`;
+    }
+    if (typeof level === 'string') {
+      const size = TextTokens[level];
+      const contrastTokenIndex = Object.keys(TextTokens).indexOf(level);
+      const contrast = ContrastTokens[inverted ? 'dark' : 'base'][contrastTokenIndex];
+      return `${size} text-slate-${contrast}`;
+    }
+    return TextTokens.base;
   }, [level, inverted]);
 }
 
