@@ -18,6 +18,7 @@ export const ContrastTokens = {
   base: ['400', '400', '700', '800', '800', '900'],
   dark: ['600', '600', '500', '300', '200', '100'],
 };
+
 export function useDesignToken({ level = 3, inverted }:TextProps):string {
   return useMemo(() => {
     if (typeof level === 'number') {
@@ -27,9 +28,9 @@ export function useDesignToken({ level = 3, inverted }:TextProps):string {
     }
     if (typeof level === 'string') {
       const size = TextTokens[level];
-      const contrastTokenIndex = Object.keys(TextTokens).indexOf(level);
-      const contrast = ContrastTokens[inverted ? 'dark' : 'base'][contrastTokenIndex];
-      return `${size} text-slate-${contrast}`;
+      const contrast = Object.keys(TextTokens).indexOf(level);
+      const { dark, base } = ContrastTokens;
+      return `${size} text-slate-${dark[contrast]} dark:text-slate-${base[contrast]}`;
     }
     return TextTokens.base;
   }, [level, inverted]);

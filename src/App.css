@@ -1,7 +1,12 @@
-.App {
-  /* text-align: center; */
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+.App, body, html {
+  font-size: 15px;
+  @apply bg-yellow-100;
+  @apply dark:text-gray-200 dark:bg-gray-800;
+}
 .App-logo {
   height: 40px;
   pointer-events: none;

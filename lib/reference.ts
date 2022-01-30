@@ -1,0 +1,3 @@
+export const ipsum = "So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I was a marine biologist.";
+export const ipsum2 = 'The winning entries in the Environmental Photographer of the Year for 2021 highlight the ways in which our planet’s climate is changing and how humans are (and are not) adapting to those changes. From top to bottom, photos by Kevin Ochieng Onyango, Simone Tramonte, and Michele Lapini. (via dense discovery)';
+export default ipsum;
