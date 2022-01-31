@@ -87,8 +87,8 @@ function TypographySample() {
       </div>
       <div className="py-4">
         <div className="flex gap-2">
-          <button type="button" className="my-2 flex-auto text-sm rounded-lg font-semibold tracking-tight p-4 bg-gray-500/10 hover:bg-gray-500/20">My button</button>
-          <button type="button" className="my-2 flex-auto text-sm rounded-lg font-semibold tracking-tight p-4 bg-blue-500 hover:bg-blue-600 hover:dark:bg-white text-white dark:bg-white/90 dark:text-black/90">My button</button>
+          <button type="button" className="my-2 button-default">My button</button>
+          <button type="button" className="my-2 button-main">My button</button>
         </div>
         <p className="text-xs text-black/50 dark:text-white/50 dark:mix-blend-color-dodge leading-tight mt-2">
           {snippet}

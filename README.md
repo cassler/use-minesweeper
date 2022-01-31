@@ -15,3 +15,8 @@ This is where your main component library code lives. Only the contents of this 
 ### `/src`
 
 This is where a ViteJS powered SPA resides with full access to your library. This is useful for development iteration. This is not included in the build output.
+
+
+## Tech Stack
+
+- [Tailwind3](https://tailwindcss.com/docs/configuration)
