@@ -4,12 +4,30 @@
 
 .App, body, html {
   font-size: 15px;
-  @apply bg-yellow-100;
+  @apply bg-yellow-400;
   @apply dark:text-gray-200 dark:bg-gray-800;
 }
-.App-logo {
-  height: 40px;
-  pointer-events: none;
+
+.text-heading-01 {
+  @apply text-black/90 dark:text-white/90;
+  @apply text-xl md:text-3xl;
+  @apply tracking-tighter font-extrabold;
+  @apply mix-blend-darken dark:mix-blend-lighten;
+}
+
+.text-input-label {
+  @apply font-semibold tracking-tight text-sm;
+  @apply text-black/50 dark:text-gray-300/50;
+  @apply mix-blend-multiply dark:mix-blend-color-dodge;
+}
+
+
+
+@layer components {
+  .App-logo {
+    height: 40px;
+    pointer-events: none;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -43,6 +61,3 @@
   }
 }
 
-button {
-  font-size: calc(10px + 2vmin);
-}
