@@ -6,22 +6,6 @@ import { ipsum2 } from '../lib/reference';
 
 const { Caption } = Text;
 
-const TextLabel = [
-  'font-semibold tracking-tight text-sm',
-  'text-black/50 dark:text-gray-300/50  mix-blend-multiply dark:mix-blend-color-dodge',
-].join(' ');
-
-const TextHeading01 = [
-  'text-black/90 dark:text-white/90',
-  'text-xl md:text-3xl',
-  'tracking-tighter font-extrabold',
-  'mix-blend-darken dark:mix-blend-lighten',
-].join(' ');
-const clsx = [
-  'space-y-4',
-  // 'w-auto',
-].join(' ');
-
 function AppHeader() {
   return (
     <header className="App-header space-x-4 items-center">
@@ -119,10 +103,10 @@ function App() {
     <>
       <AppHeader />
       <main className="dark:bg-purple-700/50 bg-gray-100 p-8">
-        <div className={clsx}>
+        <div className="space-y-4">
           <div className="flex items-center justify-center gap-4 border-b-2 pb-4 border-black/10">
             <div className="flex-1">
-              <p className={TextLabel}>This is some text</p>
+              <p className="text-input-label">This is some text</p>
               <p className="text-heading-01">This is some text</p>
             </div>
             <div className="w-12">
