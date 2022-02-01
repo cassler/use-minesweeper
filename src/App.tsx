@@ -80,10 +80,29 @@ function TypographySample() {
         <div className="rounded bg-pink-100/25 text-xs uppercase font-bold leading-tighter text-white p-1 px-2">This tag</div>
         <div className="rounded bg-pink-100/25 text-xs uppercase font-bold leading-tighter text-white p-1 px-2">This tag</div>
       </div>
-      <p className="text-sm leading-tight text-black/75 dark:text-white/75 dark:mix-blend-color-dodge">{snippet}</p>
-      <div className="py-4 flex items-center gap-2 w-full">
-        <FunInput className="flex-1" label="First Name" />
-        <FunInput className="flex-1" label="Last Name" />
+      <div className="space-y-4">
+        <h1>Heading 1 and all that jazz</h1>
+        <h2>Heading 2 and all that jazz</h2>
+        <p>{ipsum2}</p>
+        <h3>Heading 3 and all that jazz</h3>
+        <p>{ipsum2}</p>
+        <h4>Heading 4 and all that jazz</h4>
+        <p>{ipsum2}</p>
+        <h5>Heading 5 and all that jazz</h5>
+        <p>{ipsum2}</p>
+        <h6>Heading 6 and all that jazz</h6>
+        <textarea rows={5} defaultValue="My Value" className="peer w-full h-32" />
+        <label>Summary</label>
+        <div className="flex gap-2">
+          <input type="text" defaultValue="My Value" className="flex-grow" />
+          <button type="button" className="w-2 ring ring-black/10">My button</button>
+        </div>
+
+        <p className="text-sm leading-tight text-black/75 dark:text-white/75 dark:mix-blend-color-dodge">{snippet}</p>
+        <div className="py-4 flex items-center gap-2 w-full">
+          <FunInput className="flex-1" label="First Name" />
+          <FunInput className="flex-1" label="Last Name" />
+        </div>
       </div>
       <div className="py-4">
         <div className="flex gap-2">
@@ -102,7 +121,7 @@ function App() {
   return (
     <>
       <AppHeader />
-      <main className="dark:bg-purple-700/50 bg-gray-100 p-8">
+      <main className="dark:bg-purple-900 bg-gray-100 p-8">
         <div className="space-y-4">
           <div className="flex items-center justify-center gap-4 border-b-2 pb-4 border-black/10">
             <div className="flex-1">
