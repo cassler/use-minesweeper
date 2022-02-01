@@ -26,58 +26,81 @@
   body {
     @apply text-white/90;
   }
-  button {
-    @apply p-2 px-4;
-    @apply flex-auto;
-    @apply text-sm rounded-lg;
-    @apply font-semibold tracking-tight;
-    @apply bg-gray-500/10 hover:bg-gray-500/20;
-   }
-   input, textarea {
+
+  input, textarea {
     @apply p-2 px-4;
     @apply rounded-lg;
     @apply shadow-inner ring ring-black/10;
     @apply text-white;
     @apply font-semibold;
     @apply bg-white/10;
-   }
-  .button-base {
+  }
+  h1,h2,h3,h4,h5,h6 {
+    @apply text-white;
+    @apply tracking-tight;
+  }
+  h1 {
+    @apply text-2xl font-black;
+  }
+  h2 {
+    @apply text-xl font-bold;
+  }
+  h3 {
+    @apply text-lg font-semibold;
+  }
+  h4 {
+    @apply font-semibold;
+  }
+  h5 {
+    @apply text-sm font-semibold;
+    @apply tracking-tighter uppercase;
+  }
+  h6 {
+    @apply text-xs font-bold;
+  }
+  button {
     @apply flex-auto p-4;
     @apply text-sm rounded-lg;
     @apply font-semibold tracking-tight;
   }
-  .button-default {
-    @apply button-base;
-    @apply bg-gray-500/10 hover:bg-gray-500/20;
-  }
-  .button-main {
-    @apply button-base;
-    @apply text-white dark:text-black/90;
-    @apply bg-blue-500 hover:bg-blue-600;
-    @apply dark:bg-white/90 hover:dark:bg-white;
-  }
+}
+button { @apply p-4 }
+@layer components {
 
-    h1,h2,h3,h4,h5,h6 {
-      @apply text-white;
-      @apply tracking-tight;
-    }
-    h1 {
-      @apply text-2xl font-black;
-    }
-    h2 {
-      @apply text-xl font-bold;
-    }
-    h3 {
-      @apply text-lg font-semibold;
-    }
-    h4 {
-      @apply font-semibold;
-    }
-    h5, label {
-      @apply text-sm font-semibold;
-      @apply tracking-tighter uppercase;
-    }
-    h6 {
-      @apply text-xs font-bold;
-    }
+
+.button-default {
+  @apply bg-gray-500/10 hover:bg-gray-500/20;
+}
+.button-main {
+  @apply text-white dark:text-black/90;
+  @apply bg-blue-500 hover:bg-blue-600;
+  @apply dark:bg-white/90 hover:dark:bg-white;
+}
+}
+
+
+
+
+
+.App-header {
+  @apply flex items-center justify-center;
+  @apply bg-slate-900 text-slate-100;
+  @apply text-base;
+  @apply h-16;
+}
+
+.App-logo {
+  height: 40px;
+  pointer-events: none;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
