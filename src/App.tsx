@@ -1,8 +1,9 @@
 import React from 'react';
+import { ipsum2 } from '../lib/reference';
 import logo from './logo.svg';
 import { Text } from '../lib/main';
+import '../style-tokens/tailwind.css';
 import './App.css';
-import { ipsum2 } from '../lib/reference';
 
 const { Caption } = Text;
 

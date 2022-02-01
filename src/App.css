@@ -1,11 +1,7 @@
-@import '../style-tokens/tailwind.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.App, body, html {
-  font-size: 15px;
-}
+/**
+  This is used to style our demo app only.
+  These styles are not included in the distribution.
+**/
 
 .App-header {
   @apply flex items-center justify-center;
@@ -18,18 +14,14 @@
   height: 40px;
   pointer-events: none;
 }
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
