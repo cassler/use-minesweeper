@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .fun-input {
   @apply w-full p-4 shadow-inner;
   @apply rounded bg-white dark:bg-gray-100/5 placeholder-transparent;

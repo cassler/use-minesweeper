@@ -4,9 +4,14 @@
 
 `yarn & yarn dev` To install dependencies and launch a dev server:
 
-`yarn build` To build minified ES/JS and CSS distributables
+`yarn build` Will transpile ES and UMD flavors of modules - both are available for consumption. Notably, [UMD modules](https://github.com/umdjs/umd) which are capable of working everywhere, be it in the client, on the server or elsewhere. This includes compatability with `require` and `import` syntaxes with special-casing to handle CommonJS compatability.
 
-## Folders
+## Using in a project
+
+`import 'dist/style.css' from 'prism-tw-poc' // 14.5k (gzipped: 3.26K)`
+`import { Box, Button, Text } from 'prism-tw-poc' // 4.3k (gzipped: 1.6K)`
+
+## Development Folders
 
 ### `/lib`
 
