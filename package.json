@@ -2,14 +2,16 @@
   "name": "prism-tw-poc",
   "version": "0.0.0",
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "lib"
   ],
-  "main": "./dist/prism-tw.umd.js",
-  "module": "./dist/prism-tw.es.js",
+  "main": "./dist/prism-tw-poc.umd.js",
+  "module": "./dist/prism-tw-poc.js",
   "exports": {
     ".": {
-      "import": "./dist/prism-tw.es.js",
-      "require": "./dist/prism-tw.umd.js"
+      "import": "./dist/prism-tw-poc.js",
+      "require": "./dist/prism-tw-poc.umd.js"
     }
   },
   "scripts": {

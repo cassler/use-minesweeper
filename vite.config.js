@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import tailwindcss from 'tailwindcss';
+import apply from 'postcss-apply';
 import autoprefixer from "autoprefixer";
 import { name, version } from './package.json';
 
@@ -16,7 +17,8 @@ export default defineConfig({
     postcss: {
       plugins: [
         tailwindcss(),
-        autoprefixer()
+        autoprefixer(),
+        apply()
       ],
     }
   },
@@ -29,7 +31,10 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "lib/main.ts"),
       name: name,
-      fileName: (format) => `${name}.${version}.${format}.js`,
+      // we can build a super complex filename
+      // fileName: (format) => `${name}.${version}.${format}.js`,
+      // or we can just...
+      fileName: (format) => `${name}${format === 'es' ? '.es' : ''}.js`
     },
     /**
      * Externalize our peer dependencies from the bundle explicitly.
@@ -46,10 +51,11 @@ export default defineConfig({
           "react-dom": "ReactDOM",
         },
         // Rename default stylesheet to follow JS filename convention.
-        assetFileNames: (assetInfo) => {
-          const isStylesheet = assetInfo.name === 'style.css';
-          return isStylesheet ? `${name}-${version}.min.css` : assetInfo.name
-        },
+        // Uncomment this for a semver filename instead of 'style.css'
+        // assetFileNames: (assetInfo) => {
+          // const isStylesheet = assetInfo.name === 'style.css';
+          // return isStylesheet ? `${name}-${version}.min.css` : assetInfo.name
+        // },
       },
     },
   },
