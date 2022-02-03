@@ -1,0 +1,15 @@
+{
+  "window.title": "${separator} ${rootName} 🗂 ${separator} ${activeEditorMedium}",
+  "window.titleSeparator": " ✪   ",
+  "workbench.colorTheme": "Ayu Mirage PowerUp",
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#f36c39ff",
+    "titleBar.activeForeground": "#ffffffff",
+    "titleBar.inactiveBackground": "#f6927099",
+    "titleBar.inactiveForeground": "#ffffff99",
+    "*": {
+      "titleBar.activeBackground": "#1959c955",
+      "titleBar.activeForeground": "#ffffff"
+    }
+  },
+}
