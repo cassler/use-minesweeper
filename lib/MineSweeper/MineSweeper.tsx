@@ -1,92 +1,70 @@
 import {
   useRef, useContext, useMemo, useState, createContext, useEffect, CSSProperties, useLayoutEffect,
 } from 'react';
-import { Button } from '../Button';
 
-interface BoardConfigProps {
-  size: number;
-  difficulty: number;
-}
-export function newBoard({ size, difficulty }:BoardConfigProps) {
-  const axis = Array.from({ length: size }, (_, i) => i);
-  return axis.map((x) => axis.map((y) => ({
-    xAxis: x,
-    yAxis: y,
-    bomb: Math.random() < difficulty,
-  }))).flat();
-}
-
-/**
- * @param idx numerical index of point on board
- * @param axis size of board axis in absolute terms
- * @returns direct neighbors of point on board as numerical indeces.
- */
-export function getNeighbors(idx: number, axis: number):number[] {
-  // adding or subtracting these values to any index will get the
-  // neighboring indices given a square grid.
-  const pole = [idx - axis, idx, idx + axis];
-  // check if were on the first column and skip if so.
-  const left = idx % axis === 0 ? [] : pole.map((x) => x - 1);
-  // check if were on the last column and skip if so.
-  const right = (idx + 1) % axis === 0 ? [] : pole.map((x) => x + 1);
-
-  // Spread each section into an array
-  return [left, right, pole].flat()
-  // Then filter to bound values that are within the board
-    .filter((i) => i >= 0 && i < axis * axis && i !== idx)
-  // Sort them lowest to highest for ease of use.
-    .sort((a, b) => a - b);
-}
-
-export function computeBoardValues({ size, difficulty }:Props):BoardPosition[] {
-  const axis = Array.from({ length: size }, (_, i) => i);
-  const initialBoard = axis.map((x) => axis.map((y) => ({
-    xAxis: x,
-    yAxis: y,
-    bomb: Math.random() < difficulty,
-  }))).flat();
-  return initialBoard.map((item, idx) => {
-    const neighborIndeces = getNeighbors(idx, size);
-    const count = neighborIndeces.filter((i) => initialBoard[i].bomb).length;
-    return { ...item, count, neighborIndeces };
-  });
-}
-
-type BoardPosition = {
+interface BoardPosition {
   xAxis: number;
   yAxis: number;
   bomb: boolean;
   count: number,
   neighborIndeces: number[],
-};
-
-const getGridStyle = (size: number):CSSProperties => ({
-  display: 'grid',
-  gap: '8px',
-  gridTemplateColumns: `repeat(${size}, min-content)`,
-  gridTemplateRows: `repeat(${size}, min-content)`,
-});
+}
 
 export type BoardContextType = {
   board: BoardPosition[];
   flippedItems: number[];
   selectItem: Function
 };
+
 const BoardContext = createContext<BoardContextType>({
   board: [],
   flippedItems: [],
   selectItem: () => {},
 });
 
-export function MineSweeper() {
+export function useMineSweeper() {
   const [size, setSize] = useState<number>(10);
   const [difficulty, setDifficulty] = useState<number>(0.1);
   const [board, setBoard] = useState<BoardPosition[]>([]);
   const [flippedItems, setFlippedItems] = useState<number[]>([]);
+  /**
+ * @param idx numerical index of point on board
+ * @param axis size of board axis in absolute terms
+ * @returns direct neighbors of point on board as numerical indeces.
+ */
+  function getNeighbors(idx: number, axis: number):number[] {
+  // adding or subtracting these values to any index will get the
+  // neighboring indices given a square grid.
+    const pole = [idx - axis, idx, idx + axis];
+    // check if were on the first column and skip if so.
+    const left = idx % axis === 0 ? [] : pole.map((x) => x - 1);
+    // check if were on the last column and skip if so.
+    const right = (idx + 1) % axis === 0 ? [] : pole.map((x) => x + 1);
 
+    // Spread each section into an array
+    return [left, right, pole].flat()
+    // Then filter to bound values that are within the board
+      .filter((i) => i >= 0 && i < axis * axis && i !== idx)
+    // Sort them lowest to highest for ease of use.
+      .sort((a, b) => a - b);
+  }
+
+  function computeBoardValues():BoardPosition[] {
+    const axis = Array.from({ length: size }, (_, i) => i);
+    const initialBoard = axis.map((x) => axis.map((y) => ({
+      xAxis: x,
+      yAxis: y,
+      bomb: Math.random() < difficulty,
+    }))).flat();
+    return initialBoard.map((item, idx) => {
+      const neighborIndeces = getNeighbors(idx, size);
+      const count = neighborIndeces.filter((i) => initialBoard[i].bomb).length;
+      return { ...item, count, neighborIndeces };
+    });
+  }
   function handleNewGame() {
     setFlippedItems([]);
-    setBoard(computeBoardValues({ size, difficulty }));
+    setBoard(computeBoardValues());
   }
 
   function selectItem(idx:number) {
@@ -100,27 +78,46 @@ export function MineSweeper() {
     setFlippedItems([...flippedItems, idx]);
   }
 
-  useEffect(() => handleNewGame(), [size, difficulty]);
+  function getGridStyle(s: number):CSSProperties {
+    return {
+      display: 'grid',
+      gap: '8px',
+      gridTemplateColumns: `repeat(${s}, min-content)`,
+      gridTemplateRows: `repeat(${s}, min-content)`,
+    };
+  }
 
+  useEffect(() => handleNewGame(), [size, difficulty]);
   useEffect(() => {
-    // get visible 0s
-    const visibleZeros = board.filter((i, idx) => i.count === 0 && flippedItems.includes(idx));
-    // put their neighbors into a flat array
-    const neighbors = visibleZeros.map((i) => i.neighborIndeces).flat();
-    // filter neighbors that are already flipped
-    const next = neighbors.filter((i) => !flippedItems.includes(i));
+    const next = board
+      // get visible 0s
+      .filter((i, idx) => i.count === 0 && flippedItems.includes(idx))
+      // put their neighbors into a flat array
+      // filter neighbors that are already flipped
+      .map((i) => i.neighborIndeces).flat()
+      .filter((i) => !flippedItems.includes(i));
     // if all visible zeros neighbors are flipped, we're done.
     if (next.length === 0) return;
     // wait 100ms before flipping the next series of neighbors.
     setTimeout(() => {
       setFlippedItems([...flippedItems, ...next.flat()]);
-    }, 100);
+    }, 75);
   }, [flippedItems]);
 
   const ctx = useMemo(
     () => ({ board, flippedItems, selectItem }),
     [board, flippedItems, selectItem, size],
   );
+
+  return {
+    ctx, flippedItems, board, size, getGridStyle, selectItem, handleNewGame, setSize, setDifficulty,
+  };
+}
+
+export function MineSweeper() {
+  const {
+    ctx, handleNewGame, flippedItems, size, board, getGridStyle, setSize,
+  } = useMineSweeper();
   return (
     <BoardContext.Provider value={ctx}>
       <div className="flex items-center justify-center bg-black/25 p-8 pb-16 rounded-2xl">
@@ -147,7 +144,7 @@ export function MineSweeper() {
   );
 }
 
-function Item({ idx, count, bomb }: BoardPosition & { idx: number }) {
+export function Item({ idx, count, bomb }: BoardPosition & { idx: number }) {
   const { flippedItems, selectItem } = useContext(BoardContext);
   const isOpen = flippedItems.includes(idx);
   const content = bomb ? 'X' : count;
@@ -159,27 +156,19 @@ function Item({ idx, count, bomb }: BoardPosition & { idx: number }) {
     'transition-all duration-200 ease-in-out',
     'hover:shadow',
     isOpen ? 'text-white bg-white/10' : 'text-white/10',
-    // 'shadow-inner',
     isOpen && bomb && 'border-red-500/75 bg-red-500',
   ].join(' ');
+
+  function handleClick(e:React.MouseEvent) {
+    if (e.type === 'contextmenu') {
+      e.preventDefault();
+    } else {
+      selectItem(idx);
+    }
+  }
   return (
-    <button className={classes} type="button" onClick={() => selectItem(idx)}>
+    <button className={classes} type="button" onClick={handleClick}>
       <span>{isOpen && content}</span>
     </button>
   );
-}
-
-/**
- *
- * @param board an array of unknown values that are presumed to
- * @param idx absolute index of a spot on the board
- * @returns an array of only the neighboring indexes from board.
- */
-export function checkNeighbors<T = unknown>(board: T[], idx: number):T[] {
-  const axis = Math.sqrt(board.length);
-  if (!Number.isInteger(axis)) {
-    throw new Error('Board must be a square');
-  }
-  const neighbors = getNeighbors(idx, axis);
-  return neighbors.map((_, i) => board[i]);
 }
