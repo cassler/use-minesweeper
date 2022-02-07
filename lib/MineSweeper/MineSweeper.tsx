@@ -22,9 +22,15 @@ const BoardContext = createContext<BoardContextType>({
   selectItem: () => {},
 });
 
-export function useMineSweeper() {
-  const [size, setSize] = useState<number>(10);
-  const [difficulty, setDifficulty] = useState<number>(0.1);
+export interface UseMinesweeperProps {
+  initialSize?: number;
+  initialDifficulty?: number;
+}
+export function useMineSweeper(
+  { initialSize = 10, initialDifficulty = 0.25 }: UseMinesweeperProps,
+) {
+  const [size, setSize] = useState<number>(initialSize);
+  const [difficulty, setDifficulty] = useState<number>(initialDifficulty);
   const [board, setBoard] = useState<BoardPosition[]>([]);
   const [flippedItems, setFlippedItems] = useState<number[]>([]);
   /**
