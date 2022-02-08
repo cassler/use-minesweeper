@@ -28,23 +28,26 @@ import { useMineSweeper, BoardContext } from '@cassler/use-minesweeper'
 
 This provides most of what you need as an object. Below is an example implementation.
 
-```jsx
-interface Props { size: number, difficulty: number }
-function MyApp({size = 12, difficulty = 0.25}) {
-  const { ctx, getGridStyle, isItemOpen, selectItem } = useMineSweeper(size, difficulty)
-  const label = item.bomb ? 'X' : item.count;
+```tsx
+export interface Props { size: number, difficulty: number }
+export function MyApp({ size = 12, difficulty = 0.25 }:Props) {
+  const {
+    ctx, getGridStyle, isItemOpen, selectItem,
+  } = useMineSweeper(size, difficulty);
+  function getLabel(item:BoardPosition) { return item.bomb ? 'X' : item.count; }
   return (
     <BoardContext.Provider value={ctx}>
       <div style={getGridStyle(size)}>
         {ctx.board.map((item, idx) => (
-          <button onClick={() => selectItem(idx)}>
-            {isItemOpen(idx) && label}
+          <button type="button" onClick={() => selectItem(idx)}>
+            {isItemOpen(idx) && getLabel(item)}
           </button>
         ))}
       </div>
-    </BoardContent.Provider>
-  )
+    </BoardContext.Provider>
+  );
 }
+```
 
 | key | type | description                 |
 | ---- | ---- | -------------------------- |
