@@ -1,7 +1,6 @@
 import {
   useContext, useMemo, useState, createContext, useEffect, CSSProperties,
 } from 'react';
-import '../style-tokens/tailwind.css';
 
 export type BoardPosition = {
   xAxis: number;
@@ -122,7 +121,9 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
   };
 }
 export type ItemProps = Partial<BoardPosition> & { idx: number };
-export function Item({ idx, count, bomb }: ItemProps) {
+export function Item({
+  idx, count, bomb, xAxis, yAxis,
+}: ItemProps) {
   const { flippedItems, selectItem } = useContext(BoardContext);
   const isOpen = flippedItems.includes(idx);
   const content = bomb ? 'X' : count;
@@ -145,7 +146,7 @@ export function Item({ idx, count, bomb }: ItemProps) {
     }
   }
   return (
-    <button className={classes} type="button" onClick={handleClick}>
+    <button title={`x${xAxis}y${yAxis}`} className={classes} type="button" onClick={handleClick}>
       <span>{isOpen && content}</span>
     </button>
   );
@@ -160,14 +161,14 @@ export function MineSweeper() {
       <div className="flex items-center justify-center bg-black/25 p-8 pb-16 rounded-2xl">
         <div>
           <div className="flex item-center justify-center mb-4 gap-4">
-            <div className="p-2 flex-grow leading-tight bg-black/10 rounded-lg text-purple-100 font-bold">
+            <div title="current-score" className="p-2 flex-grow leading-tight bg-black/10 rounded-lg text-purple-100 font-bold">
               {`${flippedItems.length} / ${size * size}`}
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-sm text-white/50">Size</span>
-              <button type="button" className="flex-shrink bg-white/10 p-2 px-4" onClick={() => setSize(size - 1)}>-</button>
-              <button type="button" className="flex-shrink bg-white/10 p-2 px-4" onClick={() => setSize(size + 1)}>+</button>
-              <button onClick={handleNewGame} type="button" className="flex-shrink bg-white/10 p-2 px-4">
+              <span title="adjust-size" className="text-sm text-white/50">Size</span>
+              <button title="decrement" type="button" className="flex-shrink bg-white/10 p-2 px-4" onClick={() => setSize(size - 1)}>-</button>
+              <button title="increment" type="button" className="flex-shrink bg-white/10 p-2 px-4" onClick={() => setSize(size + 1)}>+</button>
+              <button title="newgame" onClick={handleNewGame} type="button" className="flex-shrink bg-white/10 p-2 px-4">
                 New Game
               </button>
             </div>

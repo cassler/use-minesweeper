@@ -17,5 +17,5 @@
     "jsx": "react-jsx"
   },
   "include": ["./src", "./lib"],
-  "exclude": ["./*.js", "./node_modules", "./test"],
+  "exclude": ["./*.js", "./node_modules", "./test", "**/*.test.*"],
 }
