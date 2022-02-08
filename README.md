@@ -4,6 +4,8 @@
 
 `yarn install @cassler/use-minesweeper`
 
+### MineSweeper React component
+
 Import the full component to use directly.
 
 ```jsx
@@ -11,16 +13,49 @@ import { MineSweeper } from '@cassler/use-minesweeper';
 import '/node_modules/@cassler/use-minesweeper/dist/style.css';
 ```
 
-Or just the hook to compose your own version:
-
-```jsx
-import { useMineSweeper } from '@cassler/use-minesweeper'
-```
-
 | Argument | Type | Default | Required | Description |
 | -------- | ----- | ----- | ------- | --------- |
 | `size`      | `number` | 12 | false | Dimensions of gameboard along each axis in absolute units. |
 | `difficulty` | `number` | 0.25 | false | Liklihood of a bomb being on any given square. Value between 0 and 1 |
+
+### useMinesweeper Hook
+
+Or just the hook to compose your own version:
+
+```jsx
+import { useMineSweeper, BoardContext } from '@cassler/use-minesweeper'
+```
+
+This provides most of what you need as an object. Below is an example implementation.
+
+```jsx
+interface Props { size: number, difficulty: number }
+function MyApp({size = 12, difficulty = 0.25}) {
+  const { ctx, getGridStyle, isItemOpen, selectItem } = useMineSweeper(size, difficulty)
+  const label = item.bomb ? 'X' : item.count;
+  return (
+    <BoardContext.Provider value={ctx}>
+      <div style={getGridStyle(size)}>
+        {ctx.board.map((item, idx) => (
+          <button onClick={() => selectItem(idx)}>
+            {isItemOpen(idx) && label}
+          </button>
+        ))}
+      </div>
+    </BoardContent.Provider>
+  )
+}
+
+| key | type | description                 |
+| ---- | ---- | -------------------------- |
+| ctx.board | object[] | All items on the board in an array, see types for details |
+| ctx.flippedItems | number[] | All currently flipped items by absolute index. |
+| ctx.selectItem | (idx:number) => void | Update state to flip selected index |
+| getGridStyle | (size:number) => CSSProperties | Provide CSS grid styles to apply to board container. |
+| handleNewGame | () => void | Resets the game state and generates a new board. |
+| setSize | (size:number) => void | Build a new board from the given axis length |
+| setDifficulty | (diff:number) => void | Provide a value between 0 and 1 to build a new board with the given difficulty factor. |
+
 
 ## Development
 

@@ -16,7 +16,7 @@ export type BoardContextType = {
   selectItem: Function
 };
 
-const BoardContext = createContext<BoardContextType>({
+export const BoardContext = createContext<BoardContextType>({
   board: [],
   flippedItems: [],
   selectItem: () => {},
@@ -116,8 +116,21 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
     [board, flippedItems, selectItem, size],
   );
 
+  function isItemOpen(idx:number) {
+    return ctx.flippedItems.includes(idx);
+  }
+
   return {
-    ctx, flippedItems, board, size, getGridStyle, selectItem, handleNewGame, setSize, setDifficulty,
+    ctx,
+    isItemOpen,
+    flippedItems,
+    board,
+    size,
+    getGridStyle,
+    selectItem,
+    handleNewGame,
+    setSize,
+    setDifficulty,
   };
 }
 export type ItemProps = Partial<BoardPosition> & { idx: number };
