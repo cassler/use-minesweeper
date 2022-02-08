@@ -6,7 +6,7 @@
     "src",
     "lib"
   ],
-  "types": "./dist",
+  "types": "./dist/main.d.ts",
   "style": "./dist/style.css",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.js",

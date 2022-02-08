@@ -1,14 +1,15 @@
 import {
-  useRef, useContext, useMemo, useState, createContext, useEffect, CSSProperties, useLayoutEffect,
+  useContext, useMemo, useState, createContext, useEffect, CSSProperties,
 } from 'react';
+import '../style-tokens/tailwind.css';
 
-interface BoardPosition {
+export type BoardPosition = {
   xAxis: number;
   yAxis: number;
   bomb: boolean;
   count: number,
   neighborIndeces: number[],
-}
+};
 
 export type BoardContextType = {
   board: BoardPosition[];
@@ -120,8 +121,8 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
     ctx, flippedItems, board, size, getGridStyle, selectItem, handleNewGame, setSize, setDifficulty,
   };
 }
-
-export function Item({ idx, count, bomb }: BoardPosition & { idx: number }) {
+export type ItemProps = Partial<BoardPosition> & { idx: number };
+export function Item({ idx, count, bomb }: ItemProps) {
   const { flippedItems, selectItem } = useContext(BoardContext);
   const isOpen = flippedItems.includes(idx);
   const content = bomb ? 'X' : count;
