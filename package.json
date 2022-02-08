@@ -1,22 +1,24 @@
 {
-  "name": "prism-tw-poc",
+  "name": "@cassler/use-minesweeper",
   "version": "0.0.0",
   "files": [
     "dist",
     "src",
     "lib"
   ],
-  "main": "./dist/prism-tw-poc.umd.js",
-  "module": "./dist/prism-tw-poc.js",
+  "types": "./dist",
+  "style": "./dist/style.css",
+  "main": "./dist/main.umd.js",
+  "module": "./dist/main.js",
   "exports": {
     ".": {
-      "import": "./dist/prism-tw-poc.js",
-      "require": "./dist/prism-tw-poc.umd.js"
+      "import": "./dist/main.js",
+      "require": "./dist/main.umd.js"
     }
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && tsc --project tsconfig.build.json",
     "preview": "vite preview"
   },
   "dependencies": {

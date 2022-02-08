@@ -34,7 +34,7 @@ export default defineConfig({
       // we can build a super complex filename
       // fileName: (format) => `${name}.${version}.${format}.js`,
       // or we can just...
-      fileName: (format) => `${name}${format === 'es' ? '.es' : ''}.js`
+      fileName: (format) => `main${format !== 'es' ? `.${format}` : ''}.js`
     },
     /**
      * Externalize our peer dependencies from the bundle explicitly.

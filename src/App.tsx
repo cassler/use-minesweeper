@@ -1,15 +1,13 @@
 import React from 'react';
-import { MineSweeper } from '../lib/MineSweeper/MineSweeper';
+// import { MineSweeper } from '../lib/MineSweeper/MineSweeper';
+
 import { ipsum2 } from '../lib/reference';
 import logo from './logo.svg';
 // Voodoo lets us load CSS through this import because
 // its exported in lib/main.ts. When consuming through
 // a package repo - styles must be imported explicitly
 // in most cases, example:
-// import 'prism-tw/dist/style.css';
-import { Text, FunInput } from '../lib/main';
-
-const { Caption } = Text;
+import { MineSweeper, useMineSweeper } from '../lib/main';
 
 export const Snippets = {
   Avatar: () => (
@@ -71,10 +69,6 @@ export const Snippets = {
           <button type="button" className="w-2 ring ring-black/10">My button</button>
         </div>
         <p className="text-sm leading-tight text-black/75 dark:text-white/75 dark:mix-blend-color-dodge">{snippet}</p>
-        <div className="py-4 flex items-center gap-2 w-full">
-          <FunInput className="flex-1" label="First Name" />
-          <FunInput className="flex-1" label="Last Name" />
-        </div>
       </>
     );
   },
@@ -99,16 +93,18 @@ function TextContentSamples() {
 function AppHeader() {
   return (
     <header className="App-header space-x-4 items-center">
-      <Text className="font-extrabold">Strive</Text>
+      <h2 className="font-extrabold">Strive</h2>
       <img src={logo} className="App-logo" alt="logo" />
-      <Caption>Interaction Lab</Caption>
+      <p>Interaction Lab</p>
     </header>
   );
 }
 function App() {
+  const { board } = useMineSweeper();
   return (
     <>
       <AppHeader />
+      {JSON.stringify(board)}
       <main className="dark:bg-purple-900 bg-gray-100 p-8">
         <div className="space-y-4">
           <Snippets.PageHeader />
