@@ -1,6 +1,6 @@
 {
   "name": "@cassler/use-minesweeper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "files": [
     "dist"
   ],
@@ -50,5 +50,12 @@
     "ts-jest": "^27.1.3",
     "typescript": "^4.4.4",
     "vite": "^2.7.2"
+  },
+  "homepage": "https://github.com/cassler/use-minesweeper#readme",
+  "bugs": {
+    "url": "https://github.com/cassler/use-minesweeper/issues"
+  },
+  "repository": {
+    "url": "https://github.com/cassler/use-minesweeper"
   }
 }
