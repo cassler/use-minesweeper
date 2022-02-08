@@ -1,15 +1,14 @@
 {
   "name": "@cassler/use-minesweeper",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "files": [
-    "dist",
-    "src",
-    "lib"
+    "dist"
   ],
   "types": "./dist/main.d.ts",
   "style": "./dist/style.css",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.js",
+  "directory": "dist",
   "exports": {
     ".": {
       "import": "./dist/main.js",
@@ -19,7 +18,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && tsc --project tsconfig.build.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "yarn build"
   },
   "dependencies": {
     "react": "^17.0.2",
