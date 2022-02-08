@@ -31,16 +31,13 @@ This provides most of what you need as an object. Below is an example implementa
 ```tsx
 export interface Props { size: number, difficulty: number }
 export function MyApp({ size = 12, difficulty = 0.25 }:Props) {
-  const {
-    ctx, getGridStyle, isItemOpen, selectItem,
-  } = useMineSweeper(size, difficulty);
-  function getLabel(item:BoardPosition) { return item.bomb ? 'X' : item.count; }
+  const { ctx, getGridStyle, isItemOpen, selectItem } = useMineSweeper(size, difficulty);
   return (
     <BoardContext.Provider value={ctx}>
       <div style={getGridStyle(size)}>
         {ctx.board.map((item, idx) => (
           <button type="button" onClick={() => selectItem(idx)}>
-            {isItemOpen(idx) && getLabel(item)}
+            {isItemOpen(idx) ? `x${item.xAxis},y${item.yAxis}` : '?'}
           </button>
         ))}
       </div>
@@ -49,15 +46,19 @@ export function MyApp({ size = 12, difficulty = 0.25 }:Props) {
 }
 ```
 
-| key | type | description                 |
-| ---- | ---- | -------------------------- |
-| ctx.board | object[] | All items on the board in an array, see types for details |
-| ctx.flippedItems | number[] | All currently flipped items by absolute index. |
-| ctx.selectItem | (idx:number) => void | Update state to flip selected index |
-| getGridStyle | (size:number) => CSSProperties | Provide CSS grid styles to apply to board container. |
-| handleNewGame | () => void | Resets the game state and generates a new board. |
-| setSize | (size:number) => void | Build a new board from the given axis length |
-| setDifficulty | (diff:number) => void | Provide a value between 0 and 1 to build a new board with the given difficulty factor. |
+`useMinsweeper` provides the following for composition. The values for `board`, `flippedItems` and
+`selectItem` are included as a single `ctx` object for ease-of-use. You can destruture these further
+if you want to use something other than `React.Context`.
+
+| key  | type | description                 |
+| ---- | ---- | --------------------------- |
+| `ctx.board` | `object[]` | All items on the board in an array, see types for details |
+| `ctx.flippedItems` | `number[]` | All currently flipped items by absolute index. |
+| `ctx.selectItem` | `(idx:number) => void` | Update state to flip selected index |
+| `getGridStyle` | `(size:number) => CSSProperties` | Provide CSS grid styles to apply to board container. |
+| `handleNewGame` | `() => void` | Resets the game state and generates a new board. |
+| `setSize` | `(size:number) => void` | Build a new board from the given axis length |
+| `setDifficulty` | `(diff:number) => void` | Provide a value between 0 and 1 to build a new board with the given difficulty factor. |
 
 
 ## Development
