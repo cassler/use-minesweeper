@@ -102,17 +102,14 @@ function AppHeader() {
 function App() {
   const { board } = useMineSweeper();
   return (
-    <>
+    <div className="dark:bg-purple-900 bg-gray-100 min-h-screen">
       <AppHeader />
-      {JSON.stringify(board)}
-      <main className="dark:bg-purple-900 bg-gray-100 p-8">
-        <div className="space-y-4">
-          <Snippets.PageHeader />
-          <MineSweeper />
-          <TextContentSamples />
-        </div>
+      <main className="p-8 space-y-4">
+        <Snippets.PageHeader />
+        <MineSweeper />
       </main>
-    </>
+    </div>
+
   );
 }
 

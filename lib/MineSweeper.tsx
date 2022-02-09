@@ -1,6 +1,7 @@
 import {
   useContext, useMemo, useState, createContext, useEffect, CSSProperties,
 } from 'react';
+import { Dialog } from '@headlessui/react';
 
 export type BoardPosition = {
   xAxis: number;
@@ -30,6 +31,7 @@ export interface UseMinesweeperProps {
 export function useMineSweeper(initialSize: number = 10, initialDifficulty: number = 0.25) {
   const [size, setSize] = useState<number>(initialSize);
   const [difficulty, setDifficulty] = useState<number>(initialDifficulty);
+  const [status, setStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [board, setBoard] = useState<BoardPosition[]>([]);
   const [flippedItems, setFlippedItems] = useState<number[]>([]);
   /**
@@ -70,16 +72,14 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
   function handleNewGame() {
     setFlippedItems([]);
     setBoard(computeBoardValues());
+    setStatus('playing');
   }
 
   function selectItem(idx:number) {
     if (flippedItems.includes(idx)) return;
     const current = board[idx];
     if (current.bomb) {
-      handleNewGame();
-      if (window && typeof window !== 'undefined') {
-        window.alert('YOU LOSE');
-      }
+      setStatus('lost');
       return;
     }
     setFlippedItems([...flippedItems, idx]);
@@ -123,6 +123,8 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
   return {
     ctx,
     isItemOpen,
+    status,
+    setStatus,
     flippedItems,
     board,
     size,
@@ -133,6 +135,96 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
     setDifficulty,
   };
 }
+
+export function MineSweeper() {
+  const ctx = useMineSweeper(12);
+  const {
+    flippedItems, size, setSize, handleNewGame, board, getGridStyle, setStatus, score,
+  } = ctx;
+  const [isOpen, toggleOpen] = useState(false);
+  function handleClose() {
+    handleNewGame();
+    toggleOpen(false);
+  }
+  return (
+    <BoardContext.Provider value={ctx}>
+      <div className="flex items-center justify-center flex-col bg-black/25 p-4 p-4 rounded-2xl">
+        <div title="toolbar" className="flex items-center justify-around min-w-full p-2 gap-2">
+          <div title="current-score" className="p-2 flex-1 leading-tight bg-black/10 rounded-lg text-purple-100 font-bold">
+            {`${flippedItems.length} / ${size * size}`}
+          </div>
+          <div className="flex-0 flex gap-2 items-center">
+            <span title="adjust-size" className="text-sm text-white/50">Size</span>
+            <button title="decrement" type="button" className="bg-white/10 p-2 px-4" onClick={() => setSize(size - 1)}>-</button>
+            <button title="increment" type="button" className="bg-white/10 p-2 px-4" onClick={() => setSize(size + 1)}>+</button>
+            <button title="increment" type="button" className="bg-white/10 p-2 px-4" onClick={() => toggleOpen(!isOpen)}>T</button>
+            <button title="newgame" onClick={handleNewGame} type="button" className="flex-shrink bg-white/10 p-2 px-4">
+              New Game
+            </button>
+          </div>
+        </div>
+        <div style={getGridStyle(size)}>
+          {board.map((pos, idx) => <Item idx={idx} key={idx.toString()} {...pos} />)}
+        </div>
+
+      </div>
+      <Dialog
+        open={ctx.status === 'lost' || isOpen}
+        onClose={() => ctx.handleNewGame()}
+        className="animate-fadeIn fixed z-10 inset-0 overflow-y-auto flex items-center justify-center bg-red-500/75"
+      >
+        <div className="ring-4 ring-red-500 animate-fadeIn transition-all duration-200 bg-white/90 text-center hover:scale-110 rotate-2 rounded-lg drop-shadow-lg text-black w-[320px] p-8 space-y-2">
+          <Dialog.Overlay />
+          <Dialog.Title className="text-black space-y-2 justify-center">
+            <div className="text-xl font-semibold pb-2">Your score</div>
+            <div className="text-black text-[64px]">{flippedItems.length}</div>
+          </Dialog.Title>
+          <p className="text-sm leading-2 pt-8 px-2 text-center">
+            You only had
+            {' '}
+            {board.length - flippedItems.length}
+            {' '}
+            left to go! There were
+            {' '}
+            {board.filter((i) => i.bomb).length}
+            {' '}
+            bombs, and you found one.
+            {' '}
+            <span className="font-bold">You Lose.</span>
+          </p>
+          <div title="actions-menu" className="pt-8 flex items-center">
+            <button
+              type="button"
+              className="
+              py-2 transition-all hover:scale-110 hover:-translate-y-2
+              duration-300 ease-in-out hover:rotate-2
+              px-4 ring ring-purple-700"
+              onClick={() => handleClose()}
+            >
+              Good Game
+
+            </button>
+            <button
+              type="button"
+              className="py-2 transition-all hover:scale-110
+              hover:-translate-y-2 duration-300
+              ease-in-out hover:-rotate-2
+
+              bg-purple-500  ring-purple-700 text-white px-4 ring ml-4"
+              onClick={() => handleClose()}
+            >
+              Play Again
+            </button>
+          </div>
+          <Dialog.Description className="text-center text-xs text-black/50 pt-8">
+            Thanks for playing.
+          </Dialog.Description>
+        </div>
+      </Dialog>
+    </BoardContext.Provider>
+  );
+}
+
 export type ItemProps = Partial<BoardPosition> & { idx: number };
 export function Item({
   idx, count, bomb, xAxis, yAxis,
@@ -162,35 +254,5 @@ export function Item({
     <button title={`x${xAxis}y${yAxis}`} className={classes} type="button" onClick={handleClick}>
       <span>{isOpen && content}</span>
     </button>
-  );
-}
-
-export function MineSweeper() {
-  const {
-    ctx, handleNewGame, flippedItems, size, board, getGridStyle, setSize,
-  } = useMineSweeper(12);
-  return (
-    <BoardContext.Provider value={ctx}>
-      <div className="flex items-center justify-center bg-black/25 p-8 pb-16 rounded-2xl">
-        <div>
-          <div className="flex item-center justify-center mb-4 gap-4">
-            <div title="current-score" className="p-2 flex-grow leading-tight bg-black/10 rounded-lg text-purple-100 font-bold">
-              {`${flippedItems.length} / ${size * size}`}
-            </div>
-            <div className="flex items-center gap-1">
-              <span title="adjust-size" className="text-sm text-white/50">Size</span>
-              <button title="decrement" type="button" className="flex-shrink bg-white/10 p-2 px-4" onClick={() => setSize(size - 1)}>-</button>
-              <button title="increment" type="button" className="flex-shrink bg-white/10 p-2 px-4" onClick={() => setSize(size + 1)}>+</button>
-              <button title="newgame" onClick={handleNewGame} type="button" className="flex-shrink bg-white/10 p-2 px-4">
-                New Game
-              </button>
-            </div>
-          </div>
-          <div style={getGridStyle(size)}>
-            {board.map((pos, idx) => <Item idx={idx} key={idx.toString()} {...pos} />)}
-          </div>
-        </div>
-      </div>
-    </BoardContext.Provider>
   );
 }
