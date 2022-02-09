@@ -23,6 +23,38 @@ export const BoardContext = createContext<BoardContextType>({
   selectItem: () => {},
 });
 
+export type ItemProps = Partial<BoardPosition> & { idx: number };
+export function Item({
+  idx, count, bomb, xAxis, yAxis,
+}: ItemProps) {
+  const { flippedItems, selectItem } = useContext(BoardContext);
+  const isOpen = flippedItems.includes(idx);
+  const content = bomb ? 'X' : count;
+  const classes = [
+    'border border-gray-500/50 rounded-lg',
+    'font-black text-lg',
+    'w-10 h-10 flex justify-center items-center',
+    'hover:border-white/75 border-2 hover:scale-110',
+    'transition-all duration-200 ease-in-out',
+    'hover:shadow',
+    isOpen ? 'text-white bg-white/10' : 'text-white/10',
+    isOpen && bomb && 'border-red-500/75 bg-red-500',
+  ].join(' ');
+
+  function handleClick(e:React.MouseEvent) {
+    if (e.type === 'contextmenu') {
+      e.preventDefault();
+    } else {
+      selectItem(idx);
+    }
+  }
+  return (
+    <button title={`x${xAxis}y${yAxis}`} className={classes} type="button" onClick={handleClick}>
+      <span>{isOpen && content}</span>
+    </button>
+  );
+}
+
 export interface UseMinesweeperProps {
   initialSize?: number;
   initialDifficulty?: number;
@@ -139,16 +171,16 @@ export function useMineSweeper(initialSize: number = 10, initialDifficulty: numb
 export function MineSweeper() {
   const ctx = useMineSweeper(12);
   const {
-    flippedItems, size, setSize, handleNewGame, board, getGridStyle, setStatus, score,
+    flippedItems, size, setSize, handleNewGame, board, getGridStyle,
   } = ctx;
-  const [isOpen, toggleOpen] = useState(false);
+
   function handleClose() {
     handleNewGame();
-    toggleOpen(false);
   }
+
   return (
     <BoardContext.Provider value={ctx}>
-      <div className="flex items-center justify-center flex-col bg-black/25 p-4 p-4 rounded-2xl">
+      <div className="flex items-center justify-center flex-col bg-black/25 p-4 rounded-2xl">
         <div title="toolbar" className="flex items-center justify-around min-w-full p-2 gap-2">
           <div title="current-score" className="p-2 flex-1 leading-tight bg-black/10 rounded-lg text-purple-100 font-bold">
             {`${flippedItems.length} / ${size * size}`}
@@ -157,7 +189,6 @@ export function MineSweeper() {
             <span title="adjust-size" className="text-sm text-white/50">Size</span>
             <button title="decrement" type="button" className="bg-white/10 p-2 px-4" onClick={() => setSize(size - 1)}>-</button>
             <button title="increment" type="button" className="bg-white/10 p-2 px-4" onClick={() => setSize(size + 1)}>+</button>
-            <button title="increment" type="button" className="bg-white/10 p-2 px-4" onClick={() => toggleOpen(!isOpen)}>T</button>
             <button title="newgame" onClick={handleNewGame} type="button" className="flex-shrink bg-white/10 p-2 px-4">
               New Game
             </button>
@@ -169,7 +200,7 @@ export function MineSweeper() {
 
       </div>
       <Dialog
-        open={ctx.status === 'lost' || isOpen}
+        open={ctx.status === 'lost'}
         onClose={() => ctx.handleNewGame()}
         className="animate-fadeIn fixed z-10 inset-0 overflow-y-auto flex items-center justify-center bg-red-500/75"
       >
@@ -222,37 +253,5 @@ export function MineSweeper() {
         </div>
       </Dialog>
     </BoardContext.Provider>
-  );
-}
-
-export type ItemProps = Partial<BoardPosition> & { idx: number };
-export function Item({
-  idx, count, bomb, xAxis, yAxis,
-}: ItemProps) {
-  const { flippedItems, selectItem } = useContext(BoardContext);
-  const isOpen = flippedItems.includes(idx);
-  const content = bomb ? 'X' : count;
-  const classes = [
-    'border border-gray-500/50 rounded-lg',
-    'font-black text-lg',
-    'w-10 h-10 flex justify-center items-center',
-    'hover:border-white/75 border-2 hover:scale-110',
-    'transition-all duration-200 ease-in-out',
-    'hover:shadow',
-    isOpen ? 'text-white bg-white/10' : 'text-white/10',
-    isOpen && bomb && 'border-red-500/75 bg-red-500',
-  ].join(' ');
-
-  function handleClick(e:React.MouseEvent) {
-    if (e.type === 'contextmenu') {
-      e.preventDefault();
-    } else {
-      selectItem(idx);
-    }
-  }
-  return (
-    <button title={`x${xAxis}y${yAxis}`} className={classes} type="button" onClick={handleClick}>
-      <span>{isOpen && content}</span>
-    </button>
   );
 }

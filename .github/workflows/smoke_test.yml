@@ -17,4 +17,10 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: yarn
-      - run: yarn jest
+      - name: 'Run tests'
+        run: yarn jest
+      - name: 'Build library'
+        run: yarn build
+
+
+
